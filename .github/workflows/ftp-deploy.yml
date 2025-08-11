@@ -3,6 +3,11 @@ name: FTP Deployment
 on:
   push:
     branches: [main, master]
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch: # Manueller Start möglich
 
 jobs:
