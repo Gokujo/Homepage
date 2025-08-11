@@ -60,9 +60,9 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const updatedAt = ref(new Date().toLocaleDateString('de-DE'))
+const { t } = useI18n()
 
 onMounted(() => {
-  const { t } = useI18n()
   document.title = t('legal.privacy.title')
 })
 </script>
