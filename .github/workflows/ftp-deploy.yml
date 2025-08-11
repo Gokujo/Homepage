@@ -8,6 +8,13 @@ on:
       - 'README.md'
       - 'LICENSE'
       - '.gitignore'
+  pull_request:
+    branches: [main, master]
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch: # Manueller Start möglich
 
 jobs:
