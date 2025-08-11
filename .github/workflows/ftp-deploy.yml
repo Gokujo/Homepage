@@ -34,11 +34,10 @@ jobs:
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_IP }}
+          server: connect.maharder.de
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           port: ${{ secrets.FTP_PORT }}
-          server-dir: /
           dangerous-clean-slate: true
           exclude: |
             **/.env
