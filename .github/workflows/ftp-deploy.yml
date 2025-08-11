@@ -2,7 +2,7 @@ name: FTP Deployment
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   build-and-deploy:
@@ -31,6 +31,11 @@ jobs:
       - name: List build files
         run: ls -la dist/
 
+      - name: Create .env file for FTP
+        run: |
+          echo "VITE_CF_TURNSTILE_SITEKEY=${{ secrets.VITE_CF_TURNSTILE_SITEKEY }}" > dist/.env
+          echo "Created .env file with Turnstile sitekey"
+
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -39,16 +44,15 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           port: ${{ secrets.FTP_PORT }}
           server-dir: /
+          local-dir: ./dist
           dangerous-clean-slate: true
           exclude: |
-            **/.env
             **/.php-ini
             **/.php-version
             **/.git*
             **/node_modules
             **/README.md
             **/.github
-            **/_redirects
 
       - name: Send success notification
         if: success()
@@ -63,16 +67,16 @@ jobs:
           from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
           body: |
             Hallo Maxim,
-            
+
             Das Deployment auf maxim-harder.de war erfolgreich!
-            
+
             📅 Datum: ${{ github.event.head_commit.timestamp }}
             🔄 Commit: ${{ github.sha }}
             📝 Nachricht: ${{ github.event.head_commit.message }}
             👤 Autor: ${{ github.event.head_commit.author.name }}
-            
+
             Alle Dateien wurden erfolgreich auf den FTP-Server hochgeladen.
-            
+
             Beste Grüße,
             GitHub Actions
         continue-on-error: true
@@ -90,16 +94,16 @@ jobs:
           from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
           body: |
             Hallo Maxim,
-            
+
             Das Deployment auf maxim-harder.de ist fehlgeschlagen!
-            
+
             📅 Datum: ${{ github.event.head_commit.timestamp }}
             🔄 Commit: ${{ github.sha }}
             📝 Nachricht: ${{ github.event.head_commit.message }}
             👤 Autor: ${{ github.event.head_commit.author.name }}
-            
+
             Bitte überprüfe die GitHub Actions Logs für weitere Details.
-            
+
             Beste Grüße,
             GitHub Actions
         continue-on-error: true
