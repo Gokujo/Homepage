@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           port: ${{ secrets.FTP_PORT }}
           server-dir: /
-          dangerous-clean-slate: false
+          dangerous-clean-slate: true
           exclude: |
             **/.env
             **/.php-ini
