@@ -28,21 +28,25 @@ const visible = ref(false)
 
 function accept() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 1, at: new Date().toISOString() }))
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 1, at: new Date().toISOString() }))
+    }
   } catch {}
   visible.value = false
 }
 
 onMounted(() => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = (typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || null
     visible.value = !raw
     // remember locale selection for i18n (optional enhancement)
-    try {
-      const path = window.location.pathname || '/'
-      if (path.startsWith('/ru')) localStorage.setItem('locale', 'ru')
-      else if (!localStorage.getItem('locale')) localStorage.setItem('locale', 'de')
-    } catch {}
+          try {
+        if (typeof window !== 'undefined') {
+          const path = window.location.pathname || '/'
+          if (path.startsWith('/ru')) localStorage.setItem('locale', 'ru')
+          else if (!localStorage.getItem('locale')) localStorage.setItem('locale', 'de')
+        }
+      } catch {}
   } catch {
     visible.value = true
   }

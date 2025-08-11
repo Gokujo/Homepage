@@ -1,0 +1,5 @@
+{
+  "name": "maxim-harder-homepage",
+  "compatibility_date": "2025-08-11",
+  "main": "./src/main.ts"
+}

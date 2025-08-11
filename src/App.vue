@@ -311,7 +311,9 @@ const localeParam = computed(() => (currentLocale.value === 'ru' ? 'ru' : undefi
 
 function persistLocale(loc: string) {
   try {
-    localStorage.setItem('locale', loc)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('locale', loc)
+    }
   } catch {}
 }
 const route = useRoute()
@@ -337,9 +339,15 @@ onMounted(() => {
     const scroller = document.documentElement.scrollTop
     if (totop) totop.style.display = scroller >= 40 ? 'block' : 'none'
   }
-  window.addEventListener('scroll', handleScroll)
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll)
+  }
   handleScroll()
-  totop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+      totop?.addEventListener('click', () => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    })
   document.addEventListener('click', handleOutsideClick)
   // html lang теперь управляется роутером через applySeoMeta()
   // keep language menu open when moving mouse between button and panel

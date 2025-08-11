@@ -65,28 +65,11 @@
           </p>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium mb-1">{{ $t('contact.turnstileTitle') }}</label>
-          <div v-if="!isValidSitekey" class="mt-2 p-3 bg-yellow-100 border border-yellow-400 rounded text-yellow-800 text-sm">
-            ⚠️ Sicherheitscheck temporär deaktiviert. Bitte kontaktieren Sie den Administrator.
-          </div>
-          <div v-else id="cf-turnstile" class="mt-1"></div>
-          <div class="mt-1 flex items-center gap-2">
-            <button
-              v-if="isValidSitekey"
-              type="button"
-              class="text-blue-600 hover:underline text-sm"
-              @click="resetTurnstile"
-            >
-              {{ $t('contact.reload') }}
-            </button>
-            <span v-if="turnstileError && isValidSitekey" class="text-sm text-red-600">{{
-              $t('contact.turnstileError')
-            }}</span>
-            <span v-else-if="turnstileToken && isValidSitekey" class="text-sm text-green-600">✅ Sicherheitscheck bestätigt</span>
-            <span v-else-if="isValidSitekey" class="text-sm text-gray-500">⏳ Bitte bestätigen Sie den Sicherheitscheck</span>
-          </div>
-        </div>
+        <Turnstile
+          :sitekey="sitekey"
+          @callback="e => console.log('success', e)"
+          size="compact"
+        />
 
         <div class="flex items-start gap-2">
           <input id="prices" type="checkbox" v-model="form.prices" required class="mt-1" />
@@ -134,6 +117,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { RouterLink } from 'vue-router'
+import Turnstile from 'cfturnstile-vue3'
 
 const pending = ref<boolean>(false)
 const success = ref<boolean>(false)
@@ -150,27 +134,11 @@ const captcha = reactive<{ a: number; b: number; answer: number | null }>({
   answer: null,
 })
 const captchaError = ref<boolean>(false)
-const turnstileToken = ref<string>('')
-const turnstileWidgetId = ref<any | null>(null)
-const turnstileError = ref<boolean>(false)
-const sitekey: string = import.meta.env.VITE_CF_TURNSTILE_SITEKEY || '1x00000000000000000000AA'
+const sitekey: string = import.meta.env.VITE_CF_TURNSTILE_SITEKEY as string || '1x00000000000000000000AA'
 
-console.log('VITE_CF_TURNSTILE_SITEKEY:', sitekey)
-
-// Prüfe ob der Sitekey gültig ist
-const isValidSitekey = computed(() => {
-  const key = sitekey.trim()
-  return key && key !== '1x00000000000000000000AA' && key.length > 20
-})
 const { t } = useI18n()
 const route = useRoute()
 const localeParam = computed(() => (route.params?.locale === 'ru' ? 'ru' : undefined))
-
-declare global {
-  interface Window {
-    turnstile?: any
-  }
-}
 
 function regenerateCaptcha() {
   captcha.a = Math.floor(Math.random() * 8) + 1
@@ -181,7 +149,6 @@ function regenerateCaptcha() {
 
 onMounted(() => {
   regenerateCaptcha()
-  initTurnstile()
 })
 
 function submit() {
@@ -193,20 +160,7 @@ function submit() {
     captchaError.value = true
     return
   }
-  
-  // Turnstile Token validieren (nur wenn Sitekey gültig ist)
-  if (isValidSitekey.value) {
-    if (!turnstileToken.value || turnstileToken.value.trim() === '') {
-      turnstileError.value = true
-      return
-    }
-    
-    // Token-Format validieren (Turnstile Token sind normalerweise ~100 Zeichen)
-    if (turnstileToken.value.length < 50) {
-      turnstileError.value = true
-      return
-    }
-  }
+
   
   pending.value = true
   
@@ -217,93 +171,16 @@ function submit() {
     `${t('contact.mail.name')}: ${form.value.name}\n` +
       `${t('contact.mail.email')}: ${form.value.email}\n` +
       `${t('contact.mail.pricesAccepted')}: ${yes}\n` +
-      `${t('contact.mail.turnstileChecked')}: ${isValidSitekey.value ? yes : 'Deaktiviert'} \n\n` +
       `${t('contact.mail.message')}:\n${form.value.message}`,
   )
   const mailto = `mailto:info@maxim-harder.de?subject=${encodeURIComponent('[Webseitenanfrage]')}%20${subject}&body=${body}`
   success.value = true
   setTimeout(() => {
-    window.location.href = mailto
+    if (typeof window !== 'undefined') {
+      window.location.href = mailto
+    }
     pending.value = false
   }, 300)
 }
 
-function initTurnstile() {
-  // Prüfe ob der Sitekey gültig ist
-  if (!isValidSitekey.value) {
-    console.warn('Invalid Turnstile sitekey detected. Please check your environment configuration.')
-    turnstileError.value = true
-    return
-  }
-  
-  // Prüfe ob Turnstile bereits geladen ist
-  if (typeof window === 'undefined' || !window.turnstile) {
-    console.warn('Turnstile not loaded, retrying...')
-    setTimeout(initTurnstile, 1000)
-    return
-  }
-  
-  const turnstileElement = document.getElementById('cf-turnstile')
-  if (!turnstileElement) {
-    console.warn('Turnstile element not found, retrying...')
-    setTimeout(initTurnstile, 1000)
-    return
-  }
-  
-  try {
-    console.log('Initializing Turnstile with sitekey:', sitekey.substring(0, 10) + '...')
-    
-    turnstileWidgetId.value = window.turnstile.render('#cf-turnstile', {
-      sitekey,
-      callback: (token: string) => {
-        console.log('Turnstile success:', token ? 'Token received' : 'No token')
-        turnstileToken.value = token
-        turnstileError.value = false
-      },
-      'error-callback': (errorCode: string) => {
-        console.error('Turnstile error occurred:', errorCode)
-        turnstileToken.value = ''
-        turnstileError.value = true
-        
-        // Spezifische Fehlerbehandlung
-        if (errorCode === '400020') {
-          console.error('Turnstile Error 400020: Invalid sitekey. Please check your VITE_CF_TURNSTILE_SITEKEY configuration.')
-        }
-      },
-      'expired-callback': () => {
-        console.log('Turnstile expired')
-        turnstileToken.value = ''
-        turnstileError.value = true
-      },
-      'timeout-callback': () => {
-        console.log('Turnstile timeout')
-        turnstileToken.value = ''
-        turnstileError.value = true
-      }
-    })
-    
-    console.log('Turnstile widget rendered successfully')
-  } catch (error) {
-    console.error('Error rendering Turnstile:', error)
-    turnstileError.value = true
-  }
-}
-
-function resetTurnstile() {
-  if (typeof window !== 'undefined' && window.turnstile && turnstileWidgetId.value) {
-    try {
-      window.turnstile.reset(turnstileWidgetId.value)
-      turnstileToken.value = ''
-      turnstileError.value = false
-      console.log('Turnstile reset successfully')
-    } catch (error) {
-      console.error('Error resetting Turnstile:', error)
-      // Fallback: neu initialisieren
-      initTurnstile()
-    }
-  } else {
-    // Fallback: neu initialisieren
-    initTurnstile()
-  }
-}
 </script>
