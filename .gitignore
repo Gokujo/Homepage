@@ -173,3 +173,4 @@ src/**/*.vue.js
 
 # TS build info
 *.tsbuildinfo
+package-lock.json
