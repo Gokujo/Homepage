@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.maxim-harder.de/sitemap.xml
+
+
