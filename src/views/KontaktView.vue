@@ -65,22 +65,11 @@
           </p>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium mb-1">{{ $t('contact.turnstileTitle') }}</label>
-          <div id="cf-turnstile" class="mt-1"></div>
-          <div class="mt-1 flex items-center gap-2">
-            <button
-              type="button"
-              class="text-blue-600 hover:underline text-sm"
-              @click="resetTurnstile"
-            >
-              {{ $t('contact.reload') }}
-            </button>
-            <span v-if="turnstileError" class="text-sm text-red-600">{{
-              $t('contact.turnstileError')
-            }}</span>
-          </div>
-        </div>
+        <Turnstile
+          :sitekey="sitekey"
+          @callback="e => console.log('success', e)"
+          size="compact"
+        />
 
         <div class="flex items-start gap-2">
           <input id="prices" type="checkbox" v-model="form.prices" required class="mt-1" />
@@ -128,6 +117,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { RouterLink } from 'vue-router'
+import Turnstile from 'cfturnstile-vue3'
 
 const pending = ref<boolean>(false)
 const success = ref<boolean>(false)
@@ -144,17 +134,11 @@ const captcha = reactive<{ a: number; b: number; answer: number | null }>({
   answer: null,
 })
 const captchaError = ref<boolean>(false)
-const turnstileToken = ref<string>('')
-const turnstileWidgetId = ref<any | null>(null)
-const turnstileError = ref<boolean>(false)
-const sitekey: string = import.meta.env.VITE_CF_TURNSTILE_SITEKEY || '1x00000000000000000000AA'
-const { t } = useI18n()
+const sitekey: string = import.meta.env.VITE_CF_TURNSTILE_SITEKEY as string || '1x00000000000000000000AA'
 
-declare global {
-  interface Window {
-    turnstile?: any
-  }
-}
+const { t } = useI18n()
+const route = useRoute()
+const localeParam = computed(() => (route.params?.locale === 'ru' ? 'ru' : undefined))
 
 function regenerateCaptcha() {
   captcha.a = Math.floor(Math.random() * 8) + 1
@@ -165,21 +149,21 @@ function regenerateCaptcha() {
 
 onMounted(() => {
   regenerateCaptcha()
-  initTurnstile()
 })
 
 function submit() {
   if (!form.value.prices || !form.value.privacy) return
+  
+  // Captcha validieren
   const expected = Number(captcha.a) + Number(captcha.b)
   if (Number(captcha.answer) !== expected) {
     captchaError.value = true
     return
   }
-  if (!turnstileToken.value) {
-    turnstileError.value = true
-    return
-  }
+
+  
   pending.value = true
+  
   // Fallback: mailto-Übergabe, damit kein Server nötig ist
   const subject = encodeURIComponent(`${t('contact.mail.subject')} ${form.value.name}`)
   const yes = t('contact.mail.yes')
@@ -187,52 +171,16 @@ function submit() {
     `${t('contact.mail.name')}: ${form.value.name}\n` +
       `${t('contact.mail.email')}: ${form.value.email}\n` +
       `${t('contact.mail.pricesAccepted')}: ${yes}\n` +
-      `${t('contact.mail.turnstileChecked')}: ${yes} \n\n` +
       `${t('contact.mail.message')}:\n${form.value.message}`,
   )
   const mailto = `mailto:info@maxim-harder.de?subject=${encodeURIComponent('[Webseitenanfrage]')}%20${subject}&body=${body}`
   success.value = true
   setTimeout(() => {
-    window.location.href = mailto
+    if (typeof window !== 'undefined') {
+      window.location.href = mailto
+    }
     pending.value = false
   }, 300)
 }
 
-function initTurnstile() {
-  const tryRender = () => {
-    if (
-      typeof window !== 'undefined' &&
-      window.turnstile &&
-      document.getElementById('cf-turnstile')
-    ) {
-      turnstileWidgetId.value = window.turnstile.render('#cf-turnstile', {
-        sitekey,
-        callback: (token: string) => {
-          turnstileToken.value = token
-          turnstileError.value = false
-        },
-        'error-callback': () => {
-          turnstileToken.value = ''
-          turnstileError.value = true
-        },
-      })
-      clearInterval(timer)
-    }
-  }
-  const timer = setInterval(tryRender, 150)
-  setTimeout(() => clearInterval(timer), 6000)
-}
-
-function resetTurnstile() {
-  if (typeof window !== 'undefined' && window.turnstile && turnstileWidgetId.value) {
-    window.turnstile.reset(turnstileWidgetId.value)
-    turnstileToken.value = ''
-    turnstileError.value = false
-  } else {
-    initTurnstile()
-  }
-}
-
-const route = useRoute()
-const localeParam = computed(() => (route.params?.locale === 'ru' ? 'ru' : undefined))
 </script>

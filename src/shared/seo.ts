@@ -43,7 +43,7 @@ export function applySeoMeta({ to, i18n, defaultTitle, defaultDesc }: ApplySeoMe
     document.head.appendChild(canonical)
   }
   const base = 'https://maxim-harder.de'
-  const { pathname, search } = window.location
+  const { pathname, search } = (typeof window !== 'undefined' && window.location) || { pathname: '/', search: '' }
   canonical.setAttribute('href', `${base}${pathname}${search || ''}`)
 
   const setOg = (property: string, content?: string) => {
