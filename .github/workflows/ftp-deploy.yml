@@ -3,13 +3,12 @@ name: FTP Deployment
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # Manueller Start möglich
 
 jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
-    secrets: inherit
+    environment: keys
 
     steps:
       - name: Checkout code
@@ -51,56 +50,56 @@ jobs:
             **/.github
             **/_redirects
 
-    - name: Send success notification
-      if: success()
-      uses: dawidd6/action-send-mail@v3
-      with:
-        server_address: ${{ secrets.EMAIL_SERVER }}
-        server_port: 587
-        username: ${{ secrets.EMAIL_USER }}
-        password: ${{ secrets.EMAIL_PASS }}
-        subject: '✅ Deployment erfolgreich - maxim-harder.de'
-        to: ${{ secrets.NOTIFICATION_EMAIL }}
-        from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
-        body: |
-          Hallo Maxim,
-          
-          Das Deployment auf maxim-harder.de war erfolgreich!
-          
-          📅 Datum: ${{ github.event.head_commit.timestamp }}
-          🔄 Commit: ${{ github.sha }}
-          📝 Nachricht: ${{ github.event.head_commit.message }}
-          👤 Autor: ${{ github.event.head_commit.author.name }}
-          
-          Alle Dateien wurden erfolgreich auf den FTP-Server hochgeladen.
-          
-          Beste Grüße,
-          GitHub Actions
-      continue-on-error: true
+      - name: Send success notification
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.EMAIL_SERVER }}
+          server_port: 587
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
+          subject: '✅ Deployment erfolgreich - maxim-harder.de'
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
+          body: |
+            Hallo Maxim,
+            
+            Das Deployment auf maxim-harder.de war erfolgreich!
+            
+            📅 Datum: ${{ github.event.head_commit.timestamp }}
+            🔄 Commit: ${{ github.sha }}
+            📝 Nachricht: ${{ github.event.head_commit.message }}
+            👤 Autor: ${{ github.event.head_commit.author.name }}
+            
+            Alle Dateien wurden erfolgreich auf den FTP-Server hochgeladen.
+            
+            Beste Grüße,
+            GitHub Actions
+        continue-on-error: true
 
-    - name: Send failure notification
-      if: failure()
-      uses: dawidd6/action-send-mail@v3
-      with:
-        server_address: ${{ secrets.EMAIL_SERVER }}
-        server_port: 587
-        username: ${{ secrets.EMAIL_USER }}
-        password: ${{ secrets.EMAIL_PASS }}
-        subject: '❌ Deployment fehlgeschlagen - maxim-harder.de'
-        to: ${{ secrets.NOTIFICATION_EMAIL }}
-        from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
-        body: |
-          Hallo Maxim,
-          
-          Das Deployment auf maxim-harder.de ist fehlgeschlagen!
-          
-          📅 Datum: ${{ github.event.head_commit.timestamp }}
-          🔄 Commit: ${{ github.sha }}
-          📝 Nachricht: ${{ github.event.head_commit.message }}
-          👤 Autor: ${{ github.event.head_commit.author.name }}
-          
-          Bitte überprüfe die GitHub Actions Logs für weitere Details.
-          
-          Beste Grüße,
-          GitHub Actions
-      continue-on-error: true
+      - name: Send failure notification
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.EMAIL_SERVER }}
+          server_port: 587
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
+          subject: '❌ Deployment fehlgeschlagen - maxim-harder.de'
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
+          body: |
+            Hallo Maxim,
+            
+            Das Deployment auf maxim-harder.de ist fehlgeschlagen!
+            
+            📅 Datum: ${{ github.event.head_commit.timestamp }}
+            🔄 Commit: ${{ github.sha }}
+            📝 Nachricht: ${{ github.event.head_commit.message }}
+            👤 Autor: ${{ github.event.head_commit.author.name }}
+            
+            Bitte überprüfe die GitHub Actions Logs für weitere Details.
+            
+            Beste Grüße,
+            GitHub Actions
+        continue-on-error: true
