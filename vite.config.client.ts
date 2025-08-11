@@ -3,13 +3,12 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { cloudflare } from "@cloudflare/vite-plugin"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig({
-  plugins: [tailwindcss(), vue(), cloudflare()],
+  plugins: [tailwindcss(), vue()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -25,8 +24,4 @@ export default defineConfig({
       },
     },
   },
-  ssr: {
-    target: 'webworker',
-    noExternal: ['vue', 'vue-router', 'vue-i18n', 'pinia']
-  }
 })

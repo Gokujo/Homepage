@@ -1,5 +1,8 @@
 {
   "name": "maxim-harder-homepage",
+  "main": "dist/maxim_harder_homepage/main.js",
   "compatibility_date": "2025-08-11",
-  "main": "./src/main.ts"
+  "assets": {
+    "directory": "dist/client"
+  }
 }

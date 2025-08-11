@@ -8,6 +8,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "build": "vue-tsc -b && vite build",
     "build:cloudflare": "vue-tsc -b && vite build --config vite.config.cloudflare.ts",
+    "build:client": "vue-tsc -b && vite build --config vite.config.client.ts",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.vue src",
     "format": "prettier --write ."

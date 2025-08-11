@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build
+        run: npm run build:client
         env:
           VITE_CF_TURNSTILE_SITEKEY: ${{ secrets.VITE_CF_TURNSTILE_SITEKEY }}
 
@@ -57,15 +57,12 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           port: ${{ secrets.FTP_PORT }}
           server-dir: /
-          local-dir: ./dist/maxim_harder_homepage/
+          local-dir: ./dist/
           dangerous-clean-slate: true
           exclude: |
             **/.php-ini
             **/.php-version
-            **/.git*
-            **/node_modules
             **/README.md
-            **/.github
 
       - name: Send success notification
         if: success()
