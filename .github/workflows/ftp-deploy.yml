@@ -74,6 +74,7 @@ jobs:
 
             Beste Grüße,
             GitHub Actions
+        continue-on-error: true
 
       - name: Send failure notification
         if: failure()
@@ -100,3 +101,4 @@ jobs:
 
             Beste Grüße,
             GitHub Actions
+        continue-on-error: true
