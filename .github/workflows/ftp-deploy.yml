@@ -9,6 +9,8 @@ jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+	environment: keys
+	secrets: inherit
 
     steps:
       - name: Checkout code
@@ -34,10 +36,11 @@ jobs:
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: connect.maharder.de
+          server: ${{ secrets.FTP_IP }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           port: ${{ secrets.FTP_PORT }}
+          server-dir: /
           dangerous-clean-slate: true
           exclude: |
             **/.env
@@ -47,6 +50,7 @@ jobs:
             **/node_modules
             **/README.md
             **/.github
+			**/_redirects
 
       - name: Send success notification
         if: success()
