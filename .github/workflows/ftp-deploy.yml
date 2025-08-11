@@ -54,7 +54,6 @@ jobs:
             **/node_modules
             **/README.md
             **/.github
-          timeout: 60000
 
       - name: Send success notification
         if: success()
