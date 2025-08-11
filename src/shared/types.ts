@@ -15,4 +15,40 @@ export interface SelectedOfferItem {
   qty: number
 }
 
+export interface PraktikaSubItems {
+  name: string
+}
+
+export interface EducationItem {
+  /**
+   * Unternehmen / Schule / Einrichtung / ...
+   */
+  company: string
+  /**
+   * Datum von
+   */
+  from: string
+  /**
+   * Datum bis (leer = heute)
+   */
+  to: string | null
+  /**
+   * Beschäftigt als... / Abschluss / ...
+   */
+  description: string | null
+}
+
+export interface PraktikaItem extends EducationItem {
+
+  /**
+   * Verwendete Technologien
+   */
+  specs: PraktikaSubItems[]
+  /**
+   * Aufgaben
+   */
+  jobTasks: PraktikaSubItems[]
+  relevant: boolean
+}
+
 

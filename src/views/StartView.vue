@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl px-3 sm:px-4 mx-auto lg:mx-0 lg:pl-8 xl:pl-16 mt-6">
+  <div class="max-w-5xl px-3 sm:px-4 mx-auto xl:mx-0 xl:pl-16 mt-6">
     <div
       class="bg-gradient-to-br from-blue-700 to-blue-600 text-white rounded-2xl p-6 shadow-lg"
       id="ki"
@@ -12,7 +12,7 @@
         <img
           id="smallfoto"
           class="w-36 sm:w-44 md:w-56 rounded-xl border-4 border-white md:float-right md:ml-6 mx-auto aspect-square"
-          src="/img/foto2.jpg"
+          src="/img/small_photo.jpg"
           :alt="$t('start.altProfile')"
         />
       </div>

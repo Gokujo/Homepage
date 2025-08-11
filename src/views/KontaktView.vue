@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-3xl px-3 sm:px-4 mx-auto lg:mx-0 lg:pl-8 xl:pl-16">
+  <div class="max-w-5xl px-3 sm:px-4 mx-auto xl:mx-0 xl:pl-16 mt-6">
     <section class="bg-white/90 rounded-lg p-6 mt-6">
       <h1 class="text-3xl font-bold">{{ $t('contact.title') }}</h1>
       <p class="text-gray-600 mt-2">{{ $t('contact.subtitle') }}</p>

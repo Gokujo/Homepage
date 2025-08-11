@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl px-3 sm:px-4 mx-auto lg:mx-0 lg:pl-8 xl:pl-16">
+  <div class="max-w-5xl px-3 sm:px-4 mx-auto xl:mx-0 xl:pl-16 mt-6">
     <section class="bg-white/95 rounded-2xl p-6 mt-6 shadow">
       <h1 class="text-3xl font-bold mb-2">{{ $t('legal.imprint.title') }}</h1>
       <p class="text-sm text-gray-600 mb-6">{{ $t('legal.imprint.subtitle') }}</p>

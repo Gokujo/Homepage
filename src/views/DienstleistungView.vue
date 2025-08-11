@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl px-3 sm:px-4 mx-auto lg:mx-0 lg:pl-8 xl:pl-16" id="berechnung">
+  <div class="max-w-5xl px-3 sm:px-4 mx-auto xl:mx-0 xl:pl-16 mt-6" id="berechnung">
     <section class="bg-white/95 rounded-2xl p-6 mt-6 shadow" id="info">
       <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">{{
         $t('services.badgeTransparent')
