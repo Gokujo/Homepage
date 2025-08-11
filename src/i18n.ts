@@ -135,11 +135,11 @@ const messages = {
         hourlyRate: { title: 'Stundensatz', desc: 'Der pauschale Stundensatz für meinen Aufwand' },
         additionalCosts: {
           title: 'Zusätzliche Kosten',
-          desc: 'Indirekte Kosten der Entwicklung: Lizenzen, Material, …',
+          desc: 'Indirekte Kosten der Entwicklung: Lizenzen, Material, etc.',
         },
         bab: {
           title: 'Allgemeiner Aufschlag',
-          desc: 'Aufschlag für Strom-, Wasser-, … auf die Gesamtsumme',
+          desc: 'Aufschlag für Strom-, Wasser-, etc. auf die Gesamtsumme',
         },
         vat: { title: 'Mehrwertsteuer', desc: 'Diese muss ich auch zahlen' },
         priority: {
@@ -161,7 +161,7 @@ const messages = {
         },
         htmlthemeframe: {
           name: 'HTML-Schablone (Framework)',
-          desc: 'Umsetzung von Vorlage in HTML5/CSS3 mit Framework (Bootstrap, Fomantic …).',
+          desc: 'Umsetzung von Vorlage in HTML5/CSS3 mit Framework (Bootstrap, Fomantic, etc.).',
         },
         htmltheme: {
           name: 'HTML-Schablone',
@@ -252,7 +252,7 @@ const messages = {
       namePlaceholder: 'Vor- und Nachname',
       email: 'E‑Mail',
       message: 'Projekt / Nachricht',
-      messagePlaceholder: 'Beschreiben Sie kurz Ihr Vorhaben (Ziele, Budgetrahmen, Zeit)…',
+      messagePlaceholder: 'Beschreiben Sie kurz Ihr Vorhaben (Ziele, Budgetrahmen, Zeit)...',
       captchaTitle: 'Sicherheitsprüfung',
       captchaAria: 'Ergebnis der Rechenaufgabe',
       reload: 'Neu laden',
@@ -265,7 +265,7 @@ const messages = {
         after: 'gesehen und bin mit diesen einverstanden.',
       },
       privacyAgree: { before: 'Ich habe die', link: 'Datenschutzhinweise', after: 'gelesen.' },
-      sending: 'Senden…',
+      sending: 'Senden...',
       send: 'Nachricht senden',
       success:
         'Vielen Dank! Ihre Nachricht wurde vorbereitet. Ihr E‑Mail‑Programm öffnet sich gleich.',
@@ -568,7 +568,7 @@ const messages = {
         hourlyRate: { title: 'Почасовая ставка', desc: 'Базовая почасовая ставка за мою работу' },
         additionalCosts: {
           title: 'Дополнительные расходы',
-          desc: 'Косвенные расходы разработки: лицензии, материалы, …',
+          desc: 'Косвенные расходы разработки: лицензии, материалы, etc.',
         },
         bab: {
           title: 'Общая надбавка',
@@ -591,7 +591,7 @@ const messages = {
         },
         htmlthemeframe: {
           name: 'HTML-шаблон (фреймворк)',
-          desc: 'Верстка шаблона в HTML5/CSS3 с фреймворком (Bootstrap, Fomantic …).',
+          desc: 'Верстка шаблона в HTML5/CSS3 с фреймворком (Bootstrap, Fomantic, etc.).',
         },
         htmltheme: {
           name: 'HTML-шаблон',
@@ -679,7 +679,7 @@ const messages = {
       namePlaceholder: 'Имя и фамилия',
       email: 'E‑mail',
       message: 'Проект / Сообщение',
-      messagePlaceholder: 'Кратко опишите задачу (цели, бюджет, сроки)…',
+      messagePlaceholder: 'Кратко опишите задачу (цели, бюджет, сроки)...',
       captchaTitle: 'Проверка безопасности',
       captchaAria: 'Результат примера',
       reload: 'Обновить',
@@ -688,7 +688,7 @@ const messages = {
       turnstileError: 'Пожалуйста, подтвердите проверку.',
       pricesAgree: { before: 'Я ознакомился с', link: 'Ценами', after: 'и согласен с ними.' },
       privacyAgree: { before: 'Я прочитал', link: 'Политику конфиденциальности', after: '.' },
-      sending: 'Отправка…',
+      sending: 'Отправка...',
       send: 'Отправить сообщение',
       success: 'Спасибо! Ваше письмо подготовлено. Сейчас откроется почтовая программа.',
       mail: {
