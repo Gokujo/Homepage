@@ -155,12 +155,16 @@ const turnstileWidgetId = ref<any | null>(null)
 const turnstileError = ref<boolean>(false)
 const sitekey: string = import.meta.env.VITE_CF_TURNSTILE_SITEKEY || '1x00000000000000000000AA'
 
+console.log('VITE_CF_TURNSTILE_SITEKEY:', sitekey)
+
 // Prüfe ob der Sitekey gültig ist
 const isValidSitekey = computed(() => {
   const key = sitekey.trim()
   return key && key !== '1x00000000000000000000AA' && key.length > 20
 })
 const { t } = useI18n()
+const route = useRoute()
+const localeParam = computed(() => (route.params?.locale === 'ru' ? 'ru' : undefined))
 
 declare global {
   interface Window {
@@ -302,7 +306,4 @@ function resetTurnstile() {
     initTurnstile()
   }
 }
-
-const route = useRoute()
-const localeParam = computed(() => (route.params?.locale === 'ru' ? 'ru' : undefined))
 </script>
