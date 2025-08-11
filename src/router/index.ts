@@ -32,14 +32,14 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   const hasLocale = typeof to.params.locale === 'string'
   try {
-    if (hasLocale) {
+    if (hasLocale && typeof window !== 'undefined') {
       localStorage.setItem('locale', String(to.params.locale))
     }
   } catch {}
   if (!hasLocale) {
     const stored = (typeof window !== 'undefined' && localStorage.getItem('locale')) || ''
-    const nav = (navigator.language || '').toLowerCase()
-    const preferred = stored || (nav.startsWith('ru') ? 'ru' : 'de')
+    const nav = (typeof window !== 'undefined' && navigator.language) || ''
+    const preferred = stored || (nav.toLowerCase().startsWith('ru') ? 'ru' : 'de')
     if (preferred !== 'de') {
       const path = to.fullPath === '/' ? '/ru' : `/ru${to.fullPath}`
       return next(path)
