@@ -27,7 +27,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.11.2",
     "@tailwindcss/postcss": "^4.1.11",
-    "@types/node": "^24.2.0",
+    "@types/node": "^24.2.1",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
     "@typescript-eslint/parser": "^8.9.0",
     "@vitejs/plugin-vue": "^6.0.1",
@@ -35,13 +35,12 @@
     "@vue/eslint-config-typescript": "^14.0.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.13.0",
-    "eslint-plugin-vue": "^9.30.0",
+    "eslint-plugin-vue": "^10.4.0",
     "postcss": "^8.5.6",
     "prettier": "^3.3.3",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.6.3",
-    "vite": "^7.1.1",
-    "vue-tsc": "^2.1.10",
-    "wrangler": "^4.28.1"
+    "vite": "^7.1.0",
+    "vue-tsc": "^3.0.5"
   }
 }
