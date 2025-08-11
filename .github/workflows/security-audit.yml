@@ -5,16 +5,16 @@ on:
     # Täglich um 6:00 UTC (8:00 MESZ) ausführen
     - cron: '0 6 * * *'
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch: # Manueller Start möglich
 
 jobs:
   security-audit:
     name: Security Audit
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
   code-scanning:
     name: Code Security Scanning
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -95,7 +95,7 @@ jobs:
   dependency-update-check:
     name: Dependency Update Check
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -110,10 +110,10 @@ jobs:
         run: |
           echo "Checking for outdated packages..."
           npm outdated || echo "All packages are up to date"
-          
+
           echo "Checking for security vulnerabilities..."
           npm audit || echo "No security vulnerabilities found"
-          
+
           echo "Checking for license compliance..."
           npm ls --depth=0
 
