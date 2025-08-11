@@ -3,6 +3,7 @@ name: FTP Deployment
 on:
   push:
     branches: [main, master]
+  workflow_dispatch: # Manueller Start möglich
 
 jobs:
   build-and-deploy:
@@ -53,20 +54,16 @@ jobs:
             **/node_modules
             **/README.md
             **/.github
+          timeout: 60000
 
       - name: Send success notification
         if: success()
-        uses: dawidd6/action-send-mail@v3
+        uses: appleboy/telegram-action@master
         with:
-          server_address: ${{ secrets.EMAIL_SERVER }}
-          server_port: 587
-          username: ${{ secrets.EMAIL_USER }}
-          password: ${{ secrets.EMAIL_PASS }}
-          subject: '✅ Deployment erfolgreich - maxim-harder.de'
-          to: ${{ secrets.NOTIFICATION_EMAIL }}
-          from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
-          body: |
-            Hallo Maxim,
+          to: ${{ secrets.TG_CHANNEL }}
+          token: ${{ secrets.TG_BOT }}
+          message: |
+            ✅ *Deployment erfolgreich - maxim-harder.de*
 
             Das Deployment auf maxim-harder.de war erfolgreich!
 
@@ -77,23 +74,17 @@ jobs:
 
             Alle Dateien wurden erfolgreich auf den FTP-Server hochgeladen.
 
-            Beste Grüße,
-            GitHub Actions
+            🚀 [GitHub Actions](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
         continue-on-error: true
 
       - name: Send failure notification
         if: failure()
-        uses: dawidd6/action-send-mail@v3
+        uses: appleboy/telegram-action@master
         with:
-          server_address: ${{ secrets.EMAIL_SERVER }}
-          server_port: 587
-          username: ${{ secrets.EMAIL_USER }}
-          password: ${{ secrets.EMAIL_PASS }}
-          subject: '❌ Deployment fehlgeschlagen - maxim-harder.de'
-          to: ${{ secrets.NOTIFICATION_EMAIL }}
-          from: 'GitHub Actions <${{ secrets.EMAIL_USER }}>'
-          body: |
-            Hallo Maxim,
+          to: ${{ secrets.TG_CHANNEL }}
+          token: ${{ secrets.TG_BOT }}
+          message: |
+            ❌ *Deployment fehlgeschlagen - maxim-harder.de*
 
             Das Deployment auf maxim-harder.de ist fehlgeschlagen!
 
@@ -104,6 +95,5 @@ jobs:
 
             Bitte überprüfe die GitHub Actions Logs für weitere Details.
 
-            Beste Grüße,
-            GitHub Actions
+            🔍 [GitHub Actions](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
         continue-on-error: true
