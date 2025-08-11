@@ -207,7 +207,7 @@ function initTurnstile() {
     ) {
       turnstileWidgetId.value = window.turnstile.render('#cf-turnstile', {
         sitekey,
-        callback: (token) => {
+        callback: (token: string) => {
           turnstileToken.value = token
           turnstileError.value = false
         },

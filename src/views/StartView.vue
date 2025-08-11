@@ -57,10 +57,10 @@
           class="text-gray-800"
           v-html="$t('start.ageLine', { age: getCurrentAge('18.10.1991') })"
         ></p>
-        <p class="text-gray-800" v-html="$tm('start.paragraphs')[0]"></p>
-        <p class="text-gray-800" v-html="$tm('start.paragraphs')[1]"></p>
-        <p class="text-gray-800" v-html="$tm('start.paragraphs')[2]"></p>
-        <p class="text-gray-800" v-html="$tm('start.paragraphs')[3]"></p>
+        <p class="text-gray-800" v-html="($tm('start.paragraphs') as string[])[0]"></p>
+        <p class="text-gray-800" v-html="($tm('start.paragraphs') as string[])[1]"></p>
+        <p class="text-gray-800" v-html="($tm('start.paragraphs') as string[])[2]"></p>
+        <p class="text-gray-800" v-html="($tm('start.paragraphs') as string[])[3]"></p>
       </div>
       <hr class="my-6" />
       <div class="mt-6 text-left">
@@ -101,7 +101,11 @@ function getCurrentAge(date: string): number {
   const d = date.split('.')
   if (d[2]) {
     const normalized = `${d[2]}.${d[1]}.${d[0]}`
-    return ((Date.now() - new Date(normalized)) / (24 * 3600 * 365.25 * 1000)) | 0
+    const birthDate = new Date(normalized)
+    const now = new Date()
+    const diffTime = now.getTime() - birthDate.getTime()
+    const diffDays = diffTime / (1000 * 60 * 60 * 24)
+    return Math.floor(diffDays / 365.25)
   }
   return 0
 }
