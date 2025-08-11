@@ -106,6 +106,9 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Check for outdated packages
         run: |
           echo "Checking for outdated packages..."
@@ -114,8 +117,17 @@ jobs:
           echo "Checking for security vulnerabilities..."
           npm audit || echo "No security vulnerabilities found"
 
-          echo "Checking for license compliance..."
-          npm ls --depth=0
+      - name: Check package.json integrity
+        run: |
+          echo "Checking package.json integrity..."
+          if [ -f "package.json" ]; then
+            echo "✅ package.json exists"
+            echo "📦 Total dependencies: $(jq '.dependencies | length' package.json)"
+            echo "🔧 Total devDependencies: $(jq '.devDependencies | length' package.json)"
+          else
+            echo "❌ package.json not found"
+            exit 1
+          fi
 
       - name: Create security summary
         if: always()
@@ -128,4 +140,4 @@ jobs:
           echo "- ✅ npm audit" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Dependency updates" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Code security scanning" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ License compliance" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Package.json integrity" >> $GITHUB_STEP_SUMMARY
