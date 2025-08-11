@@ -8,9 +8,12 @@
         <div>
           <h2 class="font-semibold">{{ $t('legal.privacy.controllerTitle') }}</h2>
           <p>
-            Maxim Harder<br>
-            Bahnhofstr. 66, 47589 Uedem<br>
-            E‑Mail: <a class="text-blue-600 hover:underline" href="mailto:info@maxim-harder.de">info@maxim-harder.de</a>
+            Maxim Harder<br />
+            Bahnhofstr. 66, 47589 Uedem<br />
+            E‑Mail:
+            <a class="text-blue-600 hover:underline" href="mailto:info@maxim-harder.de"
+              >info@maxim-harder.de</a
+            >
           </p>
         </div>
 
@@ -46,15 +49,13 @@
           <p>{{ $t('legal.privacy.hostingText') }}</p>
         </div>
 
-        <div class="text-sm text-gray-600">
-          {{ $t('legal.lastUpdated') }} {{ updatedAt }}
-        </div>
+        <div class="text-sm text-gray-600">{{ $t('legal.lastUpdated') }} {{ updatedAt }}</div>
       </div>
     </section>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -65,5 +66,3 @@ onMounted(() => {
   document.title = t('legal.privacy.title')
 })
 </script>
-
-

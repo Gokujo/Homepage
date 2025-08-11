@@ -1,6 +1,9 @@
 <template>
   <div class="max-w-5xl px-3 sm:px-4 mx-auto lg:mx-0 lg:pl-8 xl:pl-16 mt-6">
-    <div class="bg-gradient-to-br from-blue-700 to-blue-600 text-white rounded-2xl p-6 shadow-lg" id="ki">
+    <div
+      class="bg-gradient-to-br from-blue-700 to-blue-600 text-white rounded-2xl p-6 shadow-lg"
+      id="ki"
+    >
       <h1 class="text-3xl font-bold text-center md:text-left">
         {{ profile.name }}
         <div class="text-white/80 text-base font-normal">{{ $t('start.heroRole') }}</div>
@@ -30,8 +33,16 @@
         <dd>{{ $t('start.profile.technologiesList') }}</dd>
       </dl>
       <div class="mt-4 flex flex-wrap gap-3">
-        <RouterLink :to="{ name: 'kontakt', params: { locale: localeParam } }" class="bg-white text-blue-700 font-semibold px-4 py-2 rounded hover:bg-blue-50">{{ $t('start.ctaContact') }}</RouterLink>
-        <RouterLink :to="{ name: 'dienstleistung', params: { locale: localeParam } }" class="bg-blue-900/40 text-white px-4 py-2 rounded hover:bg-blue-900/60">{{ $t('start.ctaServices') }}</RouterLink>
+        <RouterLink
+          :to="{ name: 'kontakt', params: { locale: localeParam } }"
+          class="bg-white text-blue-700 font-semibold px-4 py-2 rounded hover:bg-blue-50"
+          >{{ $t('start.ctaContact') }}</RouterLink
+        >
+        <RouterLink
+          :to="{ name: 'dienstleistung', params: { locale: localeParam } }"
+          class="bg-blue-900/40 text-white px-4 py-2 rounded hover:bg-blue-900/60"
+          >{{ $t('start.ctaServices') }}</RouterLink
+        >
       </div>
     </div>
 
@@ -42,7 +53,10 @@
       </h2>
       <div class="space-y-3 text-left">
         <p class="text-gray-800">{{ $t('start.welcome') }}</p>
-        <p class="text-gray-800" v-html="$t('start.ageLine', { age: getCurrentAge('18.10.1991') })"></p>
+        <p
+          class="text-gray-800"
+          v-html="$t('start.ageLine', { age: getCurrentAge('18.10.1991') })"
+        ></p>
         <p class="text-gray-800" v-html="$tm('start.paragraphs')[0]"></p>
         <p class="text-gray-800" v-html="$tm('start.paragraphs')[1]"></p>
         <p class="text-gray-800" v-html="$tm('start.paragraphs')[2]"></p>
@@ -65,7 +79,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { RouterLink } from 'vue-router'
@@ -83,7 +97,7 @@ const profile = reactive({
   sub: 'Softwareentwickler (Web & Backend)',
 })
 
-function getCurrentAge(date) {
+function getCurrentAge(date: string): number {
   const d = date.split('.')
   if (d[2]) {
     const normalized = `${d[2]}.${d[1]}.${d[0]}`
@@ -99,7 +113,7 @@ onMounted(() => {
 })
 
 const route = useRoute()
-const localeParam = computed(() => route.params?.locale === 'ru' ? 'ru' : undefined)
+const localeParam = computed<string | undefined>(() =>
+  route.params?.locale === 'ru' ? 'ru' : undefined,
+)
 </script>
-
-

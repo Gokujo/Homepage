@@ -149,3 +149,27 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# dependencies
+node_modules
+
+# builds
+/dist
+/.vite
+/.cache
+
+# OS
+.DS_Store
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# generated JS artifacts in src (we use TS)
+src/**/*.js
+src/**/*.vue.js
+
+# TS build info
+*.tsbuildinfo

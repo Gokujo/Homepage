@@ -1,5 +1,55 @@
 import { createI18n } from 'vue-i18n'
 
+// Helpers to sort praktikaItems by date (descending)
+function parseDatumEnd(datum: string): number {
+  const parts = datum.split('-')
+  const end = parts[1] ?? ''
+  if (end === '') return Date.UTC(9999, 11, 31)
+  const seg = end.split('.')
+  let year = 0
+  let month = 11
+  if (seg.length === 2) {
+    const m = parseInt(seg[0], 10)
+    const y = parseInt(seg[1], 10)
+    year = isNaN(y) ? 0 : y
+    month = isNaN(m) ? 11 : Math.max(0, Math.min(11, m - 1))
+  } else if (seg.length === 1) {
+    const y = parseInt(seg[0], 10)
+    year = isNaN(y) ? 0 : y
+    month = 11
+  }
+  return Date.UTC(year, month, 28)
+}
+
+function parseDatumStart(datum: string): number {
+  const start = datum.includes('-') ? datum.split('-')[0] : datum
+  const seg = start.split('.')
+  let year = 0
+  let month = 0
+  if (seg.length === 2) {
+    const m = parseInt(seg[0], 10)
+    const y = parseInt(seg[1], 10)
+    year = isNaN(y) ? 0 : y
+    month = isNaN(m) ? 0 : Math.max(0, Math.min(11, m - 1))
+  } else if (seg.length === 1) {
+    const y = parseInt(seg[0], 10)
+    year = isNaN(y) ? 0 : y
+    month = 0
+  }
+  return Date.UTC(year, month, 1)
+}
+
+function sortPraktika<T extends { datum: string }>(items: readonly T[] | T[]): T[] {
+  return [...items].sort((a, b) => {
+    const aEnd = parseDatumEnd(a.datum)
+    const bEnd = parseDatumEnd(b.datum)
+    if (aEnd !== bEnd) return bEnd - aEnd
+    const aStart = parseDatumStart(a.datum)
+    const bStart = parseDatumStart(b.datum)
+    return bStart - aStart
+  })
+}
+
 const messages = {
   de: {
     nav: { home: 'Startseite', cv: 'Lebenslauf', services: 'Dienstleistungen', imprint: 'Impressum', privacy: 'Datenschutz', contact: 'Unverbindlich anfragen' },
@@ -112,6 +162,38 @@ const messages = {
       pricesAgree: { before: 'Ich habe die', link: 'Preise', after: 'gesehen und bin mit diesen einverstanden.' }, privacyAgree: { before: 'Ich habe die', link: 'Datenschutzhinweise', after: 'gelesen.' }, sending: 'Senden…', send: 'Nachricht senden', success: 'Vielen Dank! Ihre Nachricht wurde vorbereitet. Ihr E‑Mail‑Programm öffnet sich gleich.',
       mail: { subject: 'Anfrage von', name: 'Name', email: 'E‑Mail', pricesAccepted: 'Preise akzeptiert', turnstileChecked: 'Turnstile geprüft', message: 'Nachricht', yes: 'Ja' },
     },
+    cv: {
+      praktikaBadge: 'Praxis',
+      praktikaTitle: 'Berufliche Praxis',
+      praktikaSub: 'Ausgewählte Stationen',
+      ausbildungBadge: 'Ausbildung',
+      ausbildungTitle: 'Ausbildung',
+      ausbildungSub: 'Qualifikationen',
+      schuleBadge: 'Schule',
+      schuleTitle: 'Schulbildung',
+      schuleSub: 'Stationen',
+      totalExperience: 'Gesamte Entwicklungserfahrung: {years} {yearsLabel}, {months} {monthsLabel}',
+      praktikaItems: sortPraktika([
+        { datum: '09.2017-09.2021', beschreibung: 'Softwareentwicklung und -wartung', arbeit: ['Backend', 'Frontend'] },
+        { datum: '10.2021-03.2025', beschreibung: 'Full-Stack Entwicklung', arbeit: ['PHP', 'Python', 'Java'] },
+        { datum: '04.2025-', beschreibung: 'Selbstständige Softwareentwicklung', arbeit: ['Beratung', 'Implementierung'] },
+        { datum: '06.2016', beschreibung: 'Kurzpraktikum', arbeit: ['Assistenz', 'Testing'] },
+        { datum: '07.2014', beschreibung: 'Praktikum', arbeit: ['Support'] }
+      ]),
+      ausbildungItems: [
+        { datum: '2018-2020', beschreibung: 'Fachinformatiker Anwendungsentwicklung' },
+        { datum: '2013-2015', beschreibung: 'Gestaltungstechnischer Assistent' },
+        { datum: '2023-', beschreibung: 'Angewandte Informatik (berufsbegleitend)' }
+      ],
+      schuleItems: [
+        { datum: '2023-', beschreibung: 'FH Iserlohn – Studium' },
+        { datum: '2011-2013', beschreibung: 'Berufskolleg für Technik Moers' },
+        { datum: '2007-2011', beschreibung: 'Dr.-Chr.-Hufeland-Mittelschule' },
+        { datum: '2005-2007', beschreibung: 'Lessing-Gymnasium' },
+        { datum: '2001-2005', beschreibung: 'Grundschule Am Wartberg' },
+        { datum: '1998-2001', beschreibung: 'Gymnasium Nr. 5' }
+      ]
+    },
   },
   ru: {
     nav: { home: 'Главная', cv: 'Резюме', services: 'Услуги', imprint: 'Выходные данные', privacy: 'Конфиденциальность', contact: 'Оставить заявку' },
@@ -146,6 +228,38 @@ const messages = {
       title: 'Оставить заявку', subtitle: 'Ответ в течение 24 часов.', name: 'Ваше имя', namePlaceholder: 'Имя и фамилия', email: 'E‑mail', message: 'Проект / Сообщение', messagePlaceholder: 'Кратко опишите задачу (цели, бюджет, сроки)…', captchaTitle: 'Проверка безопасности', captchaAria: 'Результат примера', reload: 'Обновить', captchaError: 'Пожалуйста, решите задачу верно.',
       turnstileTitle: 'Проверка Cloudflare', turnstileError: 'Пожалуйста, подтвердите проверку.', pricesAgree: { before: 'Я ознакомился с', link: 'Ценами', after: 'и согласен с ними.' }, privacyAgree: { before: 'Я прочитал', link: 'Политику конфиденциальности', after: '.' }, sending: 'Отправка…', send: 'Отправить сообщение', success: 'Спасибо! Ваше письмо подготовлено. Сейчас откроется почтовая программа.',
       mail: { subject: 'Заявка от', name: 'Имя', email: 'E‑mail', pricesAccepted: 'Цены приняты', turnstileChecked: 'Turnstile подтверждён', message: 'Сообщение', yes: 'Да' },
+    },
+    cv: {
+      praktikaBadge: 'Практика',
+      praktikaTitle: 'Профессиональная практика',
+      praktikaSub: 'Избранные места',
+      ausbildungBadge: 'Обучение',
+      ausbildungTitle: 'Образование',
+      ausbildungSub: 'Квалификации',
+      schuleBadge: 'Школа',
+      schuleTitle: 'Школьное образование',
+      schuleSub: 'Этапы',
+      totalExperience: 'Общий опыт разработки: {years} {yearsLabel}, {months} {monthsLabel}',
+      praktikaItems: sortPraktika([
+        { datum: '09.2017-09.2021', beschreibung: 'Разработка и сопровождение ПО', arbeit: ['Backend', 'Frontend'] },
+        { datum: '10.2021-03.2025', beschreibung: 'Full‑Stack разработка', arbeit: ['PHP', 'Python', 'Java'] },
+        { datum: '04.2025-', beschreibung: 'Самозанятость: разработка ПО', arbeit: ['Консалтинг', 'Реализация'] },
+        { datum: '06.2016', beschreibung: 'Краткая практика', arbeit: ['Ассистирование', 'Тестирование'] },
+        { datum: '07.2014', beschreibung: 'Практика', arbeit: ['Поддержка'] }
+      ]),
+      ausbildungItems: [
+        { datum: '2018-2020', beschreibung: 'Разработчик ПО (FIAE)' },
+        { datum: '2013-2015', beschreibung: 'Графический ассистент' },
+        { datum: '2023-', beschreibung: 'Прикладная информатика (заочно)' }
+      ],
+      schuleItems: [
+        { datum: '2023-', beschreibung: 'FH Iserlohn — Университет' },
+        { datum: '2011-2013', beschreibung: 'Колледж техники Моерс' },
+        { datum: '2007-2011', beschreibung: 'Средняя школа Dr.-Chr.-Hufeland' },
+        { datum: '2005-2007', beschreibung: 'Гимназия им. Лессинга' },
+        { datum: '2001-2005', beschreibung: 'Начальная школа Am Wartberg' },
+        { datum: '1998-2001', beschreibung: 'Гимназия № 5' }
+      ]
     },
   },
 } as const

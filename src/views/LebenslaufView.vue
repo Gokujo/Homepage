@@ -1,13 +1,25 @@
 <template>
   <div class="max-w-5xl px-3 sm:px-4 mx-auto lg:mx-0 lg:pl-8 xl:pl-16" id="werdegang">
     <section class="bg-white/95 rounded-2xl p-6 mt-6 shadow" id="praktika">
-      <span class="inline-block bg-blue-600 text-white text-xs px-2 py-1 rounded">{{ $t('cv.praktikaBadge') }}</span>
+      <span class="inline-block bg-blue-600 text-white text-xs px-2 py-1 rounded">{{
+        $t('cv.praktikaBadge')
+      }}</span>
       <h2 class="text-2xl font-semibold mt-2">{{ $t('cv.praktikaTitle') }}</h2>
       <small class="text-gray-600">{{ $t('cv.praktikaSub') }}</small>
-      <div class="mt-1 text-sm text-gray-500">{{ $t('cv.totalExperience', devExperienceWithLabels) }}</div>
+      <div class="mt-1 text-sm text-gray-500">
+        {{ $t('cv.totalExperience', devExperienceWithLabels) }}
+      </div>
       <div class="mt-4 space-y-4">
-        <div class="flex gap-3 sm:gap-4 items-start" v-for="(platz, idx) in praktikaParagraphs" :key="idx">
-          <div class="hidden sm:flex w-10 h-10 rounded-full bg-gray-200 items-center justify-center text-xl">🏢</div>
+        <div
+          class="flex gap-3 sm:gap-4 items-start"
+          v-for="(platz, idx) in praktikaParagraphs"
+          :key="idx"
+        >
+          <div
+            class="hidden sm:flex w-10 h-10 rounded-full bg-gray-200 items-center justify-center text-xl"
+          >
+            🏢
+          </div>
           <div>
             <div class="font-semibold leading-tight">{{ platz.unternehmen }}</div>
             <div class="text-xs sm:text-sm text-gray-600">
@@ -15,27 +27,49 @@
               <span
                 v-if="formatDuration(platz.datum)"
                 class="ml-2 inline-block px-2 py-0.5 rounded-full"
-                :class="isOngoing(platz.datum) ? 'bg-green-200 text-green-800' : 'bg-gray-200 text-gray-700'"
+                :class="
+                  isOngoing(platz.datum)
+                    ? 'bg-green-200 text-green-800'
+                    : 'bg-gray-200 text-gray-700'
+                "
               >
                 {{ formatDuration(platz.datum) }}
               </span>
             </div>
             <p class="mt-1">{{ platz.beschreibung }}</p>
             <div class="mt-2 flex gap-2 flex-wrap">
-              <span class="text-xs bg-gray-200 px-2 py-1 rounded" v-for="(arb, k) in platz.arbeit" :key="k">{{ arb.text }}</span>
+              <span
+                class="text-xs bg-gray-200 px-2 py-1 rounded"
+                v-for="(arb, k) in platz.arbeit"
+                :key="k"
+                >{{ arb.text }}</span
+              >
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="bg-gradient-to-br from-blue-700 to-blue-600 text-white rounded-2xl p-6 mt-6 shadow" id="ausbildung">
-      <span class="inline-block bg-red-500 text-white text-xs px-2 py-1 rounded">{{ $t('cv.ausbildungBadge') }}</span>
+    <section
+      class="bg-gradient-to-br from-blue-700 to-blue-600 text-white rounded-2xl p-6 mt-6 shadow"
+      id="ausbildung"
+    >
+      <span class="inline-block bg-red-500 text-white text-xs px-2 py-1 rounded">{{
+        $t('cv.ausbildungBadge')
+      }}</span>
       <h2 class="text-2xl font-semibold mt-2">{{ $t('cv.ausbildungTitle') }}</h2>
       <small class="text-blue-100">{{ $t('cv.ausbildungSub') }}</small>
       <div class="mt-4 space-y-4">
-        <div class="flex gap-3 sm:gap-4 items-start" v-for="(platz, idx) in ausbildungParagraphs" :key="idx">
-          <div class="hidden sm:flex w-10 h-10 rounded-full bg-blue-600 items-center justify-center text-xl">🎓</div>
+        <div
+          class="flex gap-3 sm:gap-4 items-start"
+          v-for="(platz, idx) in ausbildungParagraphs"
+          :key="idx"
+        >
+          <div
+            class="hidden sm:flex w-10 h-10 rounded-full bg-blue-600 items-center justify-center text-xl"
+          >
+            🎓
+          </div>
           <div>
             <div class="font-semibold">{{ platz.unternehmen }}</div>
             <div class="text-xs sm:text-sm text-blue-100">{{ platz.datum }}</div>
@@ -46,12 +80,22 @@
     </section>
 
     <section class="bg-white/95 rounded-2xl p-6 mt-6 shadow" id="schule">
-      <span class="inline-block bg-blue-600 text-white text-xs px-2 py-1 rounded">{{ $t('cv.schuleBadge') }}</span>
+      <span class="inline-block bg-blue-600 text-white text-xs px-2 py-1 rounded">{{
+        $t('cv.schuleBadge')
+      }}</span>
       <h2 class="text-2xl font-semibold mt-2">{{ $t('cv.schuleTitle') }}</h2>
       <small class="text-gray-600">{{ $t('cv.schuleSub') }}</small>
       <div class="mt-4 space-y-4">
-        <div class="flex gap-3 sm:gap-4 items-start" v-for="(platz, idx) in schuleParagraphs" :key="idx">
-          <div class="hidden sm:flex w-10 h-10 rounded-full bg-gray-200 items-center justify-center text-xl">🏫</div>
+        <div
+          class="flex gap-3 sm:gap-4 items-start"
+          v-for="(platz, idx) in schuleParagraphs"
+          :key="idx"
+        >
+          <div
+            class="hidden sm:flex w-10 h-10 rounded-full bg-gray-200 items-center justify-center text-xl"
+          >
+            🏫
+          </div>
           <div>
             <div class="font-semibold">{{ platz.unternehmen }}</div>
             <div class="text-xs sm:text-sm text-gray-600">{{ platz.datum }}</div>
@@ -61,16 +105,34 @@
       </div>
     </section>
   </div>
-  
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+interface ArbeitItem {
+  text: string
+}
+interface PraktikaItem {
+  datum: string
+  unternehmen: string
+  beschreibung: string
+  arbeit: ArbeitItem[]
+}
+interface SimpleItem {
+  datum: string
+  unternehmen: string
+  beschreibung: string
+}
+
 const { tm } = useI18n()
-const praktikaParagraphs = computed(() => {
-  const items = tm('cv.praktikaItems')
+const praktikaParagraphs = computed<PraktikaItem[]>(() => {
+  const items = tm('cv.praktikaItems') as Array<{
+    datum: string
+    beschreibung: string
+    arbeit?: string[]
+  }>
   const companies = [
     'Bruckmann Steuerungstechnik GmbH',
     'Weltraumkommando der Bundeswehr',
@@ -86,48 +148,86 @@ const praktikaParagraphs = computed(() => {
     'Setassistenz bei Dreharbeiten von „Demon in Me“',
     'mScb - Markus Schubert',
   ]
-  return items.map((it, idx) => ({ datum: it.datum, unternehmen: companies[idx], beschreibung: it.beschreibung, arbeit: (it.arbeit || []).map((t) => ({ text: t })) }))
+  return items.map((it, idx) => ({
+    datum: it.datum,
+    unternehmen: companies[idx],
+    beschreibung: it.beschreibung,
+    arbeit: (it.arbeit || []).map((t) => ({ text: t })),
+  }))
 })
 
-const ausbildungParagraphs = computed(() => {
-  const items = tm('cv.ausbildungItems')
-  const companies = ['Joint Analytical Systems GmbH', 'BSZ e.o. plauen', 'Mediadesign Hochschule Berlin']
-  return items.map((it, idx) => ({ datum: it.datum, unternehmen: companies[idx], beschreibung: it.beschreibung }))
+const ausbildungParagraphs = computed<SimpleItem[]>(() => {
+  const items = tm('cv.ausbildungItems') as Array<{ datum: string; beschreibung: string }>
+  const companies = [
+    'Joint Analytical Systems GmbH',
+    'BSZ e.o. plauen',
+    'Mediadesign Hochschule Berlin',
+  ]
+  return items.map((it, idx) => ({
+    datum: it.datum,
+    unternehmen: companies[idx],
+    beschreibung: it.beschreibung,
+  }))
 })
 
-const schuleParagraphs = computed(() => {
-  const items = tm('cv.schuleItems')
-  const companies = ['FH Iserlohn', 'Berufskollege für Technik Moers', 'Dr.-Chr.-Hufeland-Mittelschule', 'Lessing-Gymnasium', 'Grundschule Am Wartberg', 'Gymnasium Nr. 5']
-  return items.map((it, idx) => ({ datum: it.datum, unternehmen: companies[idx], beschreibung: it.beschreibung }))
+const schuleParagraphs = computed<SimpleItem[]>(() => {
+  const items = tm('cv.schuleItems') as Array<{ datum: string; beschreibung: string }>
+  const companies = [
+    'FH Iserlohn',
+    'Berufskollege für Technik Moers',
+    'Dr.-Chr.-Hufeland-Mittelschule',
+    'Lessing-Gymnasium',
+    'Grundschule Am Wartberg',
+    'Gymnasium Nr. 5',
+  ]
+  return items.map((it, idx) => ({
+    datum: it.datum,
+    unternehmen: companies[idx],
+    beschreibung: it.beschreibung,
+  }))
 })
 
-function parseDateToken(token, hintYear) {
+function parseDateToken(token: string, hintYear?: number): Date {
   const parts = token.split('.')
   const now = new Date()
-  let day = 1, month = 0, year = now.getFullYear()
+  let day = 1,
+    month = 0,
+    year = now.getFullYear()
   const cleaned = parts.filter(Boolean)
-  if (cleaned.length === 3) { // dd.mm.yyyy
+  if (cleaned.length === 3) {
+    // dd.mm.yyyy
     day = Number(cleaned[0]) || 1
     month = (Number(cleaned[1]) || 1) - 1
     year = Number(cleaned[2]) || hintYear || now.getFullYear()
   } else if (cleaned.length === 2) {
-    const a = cleaned[0], b = cleaned[1]
-    if (String(b).length === 4) { // mm.yyyy
+    const a = cleaned[0],
+      b = cleaned[1]
+    if (String(b).length === 4) {
+      // mm.yyyy
       month = (Number(a) || 1) - 1
       year = Number(b) || hintYear || now.getFullYear()
-    } else { // dd.mm (year from hint)
+    } else {
+      // dd.mm (year from hint)
       day = Number(a) || 1
       month = (Number(b) || 1) - 1
       year = hintYear || now.getFullYear()
     }
-  } else if (cleaned.length === 1) { // yyyy or mm
+  } else if (cleaned.length === 1) {
+    // yyyy or mm
     const num = Number(cleaned[0])
-    if (num >= 1000) { year = num; month = 0; day = 1 } else { month = (num || 1) - 1; year = hintYear || now.getFullYear() }
+    if (num >= 1000) {
+      year = num
+      month = 0
+      day = 1
+    } else {
+      month = (num || 1) - 1
+      year = hintYear || now.getFullYear()
+    }
   }
   return new Date(year, month, day)
 }
 
-function enumerateMonths(rangeStr) {
+function enumerateMonths(rangeStr: string): string[] {
   // Examples: '04.2025-', '10.2021-03.2025', '01.06.-03.07.2015', '01.07.-31.07.2014', '10.2011'
   const now = new Date()
   const raw = String(rangeStr).trim()
@@ -172,17 +272,20 @@ function enumerateMonths(rangeStr) {
   while (y < endY || (y === endY && m <= endM)) {
     keys.push(`${y}-${String(m + 1).padStart(2, '0')}`)
     m += 1
-    if (m >= 12) { m = 0; y += 1 }
+    if (m >= 12) {
+      m = 0
+      y += 1
+    }
   }
   return keys
 }
 
-function isOngoing(rangeStr) {
+function isOngoing(rangeStr: string): boolean {
   const parts = String(rangeStr).split('-')
   return parts.length === 2 && (!parts[1] || parts[1].trim() === '')
 }
 
-function formatDuration(rangeStr) {
+function formatDuration(rangeStr: string): string {
   const months = enumerateMonths(rangeStr).length
   if (!months) return ''
   const years = Math.floor(months / 12)
@@ -195,7 +298,7 @@ function formatDuration(rangeStr) {
   return `${rest} ${mLabel}`
 }
 
-const totalExperience = computed(() => {
+const totalExperience = computed<{ years: number; months: number }>(() => {
   const monthSet = new Set()
   for (const it of praktikaParagraphs.value) {
     for (const key of enumerateMonths(it.datum)) monthSet.add(key)
@@ -207,7 +310,8 @@ const totalExperience = computed(() => {
   try {
     const birth = new Date(1991, 9, 18) // 18.10.1991 (month is 0-based)
     const now = new Date()
-    const ageMonths = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth())
+    const ageMonths =
+      (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth())
     if (months > ageMonths) {
       const y = Math.floor(ageMonths / 12)
       const m = ageMonths % 12
@@ -218,7 +322,7 @@ const totalExperience = computed(() => {
 })
 
 // Development-only total based on explicit ranges from the user
-const developmentRanges = [
+const developmentRanges: string[] = [
   '20.06.-24.06.2016',
   '09.2017-09.2021',
   '10.2021-03.2025',
@@ -228,7 +332,7 @@ const developmentRanges = [
   '05.2009',
 ]
 
-const totalDevExperience = computed(() => {
+const totalDevExperience = computed<{ years: number; months: number }>(() => {
   const monthSet = new Set()
   for (const r of developmentRanges) {
     for (const key of enumerateMonths(r)) monthSet.add(key)
@@ -239,22 +343,29 @@ const totalDevExperience = computed(() => {
   return { years, months: restMonths }
 })
 
-function dePluralYears(n){ return n === 1 ? 'Jahr' : 'Jahre' }
-function dePluralMonths(n){ return n === 1 ? 'Monat' : 'Monate' }
-function ruPluralYears(n){
-  const mod10 = n % 10, mod100 = n % 100
+function dePluralYears(n: number) {
+  return n === 1 ? 'Jahr' : 'Jahre'
+}
+function dePluralMonths(n: number) {
+  return n === 1 ? 'Monat' : 'Monate'
+}
+function ruPluralYears(n: number) {
+  const mod10 = n % 10,
+    mod100 = n % 100
   if (mod10 === 1 && mod100 !== 11) return 'год'
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'года'
   return 'лет'
 }
-function ruPluralMonths(n){
-  const mod10 = n % 10, mod100 = n % 100
+function ruPluralMonths(n: number) {
+  const mod10 = n % 10,
+    mod100 = n % 100
   if (mod10 === 1 && mod100 !== 11) return 'месяц'
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'месяца'
   return 'месяцев'
 }
 
-const experienceWithLabelsBase = (years, months) => {
+type LabeledExperience = { years: number; months: number; yearsLabel: string; monthsLabel: string }
+const experienceWithLabelsBase = (years: number, months: number): LabeledExperience => {
   const locale = (typeof document !== 'undefined' ? document.documentElement.lang : 'de') || 'de'
   if (locale.startsWith('ru')) {
     return { years, months, yearsLabel: ruPluralYears(years), monthsLabel: ruPluralMonths(months) }
@@ -262,12 +373,12 @@ const experienceWithLabelsBase = (years, months) => {
   return { years, months, yearsLabel: dePluralYears(years), monthsLabel: dePluralMonths(months) }
 }
 
-const experienceWithLabels = computed(() => {
+const experienceWithLabels = computed<LabeledExperience>(() => {
   const { years, months } = totalExperience.value
   return experienceWithLabelsBase(years, months)
 })
 
-const devExperienceWithLabels = computed(() => {
+const devExperienceWithLabels = computed<LabeledExperience>(() => {
   const { years, months } = totalDevExperience.value
   return experienceWithLabelsBase(years, months)
 })
@@ -276,5 +387,3 @@ onMounted(() => {
   document.title = 'Mein Werdegang'
 })
 </script>
-
-

@@ -17,12 +17,14 @@ self.addEventListener('fetch', (event) => {
   const req = event.request
   if (req.method !== 'GET') return
   const url = new URL(req.url)
+  // Skip non-HTTP(S) requests (e.g., chrome-extension://)
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return
   // NetworkFirst for navigations
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req).then((resp) => {
         const copy = resp.clone()
-        caches.open(CACHE_NAME).then((c) => c.put(req, copy))
+        caches.open(CACHE_NAME).then((c) => { if (resp.ok && (url.protocol === 'http:' || url.protocol === 'https:')) c.put(req, copy) })
         return resp
       }).catch(() => caches.match(req).then((r) => r || caches.match('/index.html')))
     )
@@ -33,7 +35,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(req).then((cached) => cached || fetch(req).then((resp) => {
         const copy = resp.clone()
-        caches.open(CACHE_NAME).then((c) => c.put(req, copy))
+        caches.open(CACHE_NAME).then((c) => { if (resp.ok && (url.protocol === 'http:' || url.protocol === 'https:')) c.put(req, copy) })
         return resp
       }))
     )
@@ -44,7 +46,7 @@ self.addEventListener('fetch', (event) => {
       caches.match(req).then((cached) => {
         const fetchPromise = fetch(req, { cache: 'no-store' }).then((resp) => {
           const copy = resp.clone()
-          caches.open(CACHE_NAME).then((c) => c.put(req, copy))
+          caches.open(CACHE_NAME).then((c) => { if (resp.ok && (url.protocol === 'http:' || url.protocol === 'https:')) c.put(req, copy) })
           return resp
         }).catch(() => cached)
         return cached || fetchPromise
@@ -58,7 +60,7 @@ self.addEventListener('fetch', (event) => {
       caches.match(req).then((cached) => {
         const fetchPromise = fetch(req).then((resp) => {
           const copy = resp.clone()
-          caches.open(CACHE_NAME).then((c) => c.put(req, copy))
+          caches.open(CACHE_NAME).then((c) => { if (resp.ok && (url.protocol === 'http:' || url.protocol === 'https:')) c.put(req, copy) })
           return resp
         })
         return cached || fetchPromise
