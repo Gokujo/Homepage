@@ -241,7 +241,7 @@
         <RouterLink
           :to="{ name: 'datenschutz', params: { locale: localeParam } }"
           class="hover:text-blue-600"
-          >{{ $t('footer.privacy') }}</RouterLink
+                      >{{ $t('footer.privacyLink') }}</RouterLink
         >
         <a href="https://github.com/Gokujo" class="hover:text-blue-600" target="_blank">{{
           $t('footer.github')

@@ -203,7 +203,7 @@ const messages = {
     },
     footer: {
       imprint: 'Impressum',
-      privacy: 'Datenschutz',
+      privacyLink: 'Datenschutz',
       github: 'Github',
       devcraft: 'DevCraftClub',
       xing: 'Xing Profil',
@@ -630,7 +630,7 @@ const messages = {
     },
     footer: {
       imprint: 'Выходные данные',
-      privacy: 'Конфиденциальность',
+      privacyLink: 'Конфиденциальность',
       github: 'Github',
       devcraft: 'DevCraftClub',
       xing: 'Профиль Xing',
