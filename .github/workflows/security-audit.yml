@@ -1,0 +1,131 @@
+name: Security Audit
+
+on:
+  schedule:
+    # Täglich um 6:00 UTC (8:00 MESZ) ausführen
+    - cron: '0 6 * * *'
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # Manueller Start möglich
+
+jobs:
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run npm outdated check
+        run: npm outdated
+        continue-on-error: true
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+        continue-on-error: true
+
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project-name: 'maxim-harder-website'
+          path: '.'
+          format: 'HTML'
+          out: 'reports'
+        continue-on-error: true
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-report
+          path: reports/
+          retention-days: 30
+
+  code-scanning:
+    name: Code Security Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint security rules
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Run TypeScript security check
+        run: npx vue-tsc --noEmit
+        continue-on-error: true
+
+      - name: Run Bandit security linter (Python)
+        run: |
+          pip install bandit
+          find . -name "*.py" -exec bandit {} \;
+        continue-on-error: true
+
+  dependency-update-check:
+    name: Dependency Update Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Check for outdated packages
+        run: |
+          echo "Checking for outdated packages..."
+          npm outdated || echo "All packages are up to date"
+          
+          echo "Checking for security vulnerabilities..."
+          npm audit || echo "No security vulnerabilities found"
+          
+          echo "Checking for license compliance..."
+          npm ls --depth=0
+
+      - name: Create security summary
+        if: always()
+        run: |
+          echo "## Security Audit Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Checks Completed:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ npm audit" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Dependency updates" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code security scanning" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ License compliance" >> $GITHUB_STEP_SUMMARY

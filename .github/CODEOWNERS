@@ -1,0 +1,20 @@
+# Code Owners - Alle Änderungen müssen von Maxim Harder genehmigt werden
+# Diese Datei definiert, wer für verschiedene Bereiche des Codes verantwortlich ist
+
+# Alle Dateien im Repository
+* @Gokujo
+
+# Spezifische Bereiche (optional, für bessere Organisation)
+/src/ @Gokujo
+/public/ @Gokujo
+/docs/ @Gokujo
+/.github/ @Gokujo
+
+# Konfigurationsdateien
+package.json @Gokujo
+package-lock.json @Gokujo
+tsconfig.json @Gokujo
+vite.config.ts @Gokujo
+tailwind.config.ts @Gokujo
+eslint.config.js @Gokujo
+prettier.config.cjs @Gokujo
