@@ -70,15 +70,16 @@ jobs:
         with:
           to: ${{ secrets.TG_CHANNEL }}
           token: ${{ secrets.TG_BOT }}
+          format: markdown
           message: |
             ✅ *Deployment erfolgreich - maxim-harder.de*
 
-            Das Deployment auf maxim-harder.de war erfolgreich!
+            Das Deployment auf maxim-harder.de war **erfolgreich**!
 
-            📅 Datum: ${{ github.event.head_commit.timestamp }}
-            🔄 Commit: ${{ github.sha }}
-            📝 Nachricht: ${{ github.event.head_commit.message }}
-            👤 Autor: ${{ github.event.head_commit.author.name }}
+            📅 **Datum**: ${{ github.event.head_commit.timestamp }}
+            🔄 **Commit**: `${{ github.sha }}`
+            📝 **Nachricht**: ${{ github.event.head_commit.message }}
+            👤 **Autor**: [${{ github.event.head_commit.author.name }}](https://github.com/${{ github.event.head_commit.author.username }})
 
             Alle Dateien wurden erfolgreich auf den FTP-Server hochgeladen.
 
@@ -91,15 +92,16 @@ jobs:
         with:
           to: ${{ secrets.TG_CHANNEL }}
           token: ${{ secrets.TG_BOT }}
+          format: markdown
           message: |
             ❌ *Deployment fehlgeschlagen - maxim-harder.de*
 
-            Das Deployment auf maxim-harder.de ist fehlgeschlagen!
+            Das Deployment auf maxim-harder.de ist **fehlgeschlagen**!
 
-            📅 Datum: ${{ github.event.head_commit.timestamp }}
-            🔄 Commit: ${{ github.sha }}
-            📝 Nachricht: ${{ github.event.head_commit.message }}
-            👤 Autor: ${{ github.event.head_commit.author.name }}
+            📅 **Datum**: ${{ github.event.head_commit.timestamp }}
+            🔄 **Commit**: `${{ github.sha }}`
+            📝 **Nachricht**: ${{ github.event.head_commit.message }}
+            👤 **Autor**: [${{ github.event.head_commit.author.name }}](https://github.com/${{ github.event.head_commit.author.username }})
 
             Bitte überprüfe die GitHub Actions Logs für weitere Details.
 
