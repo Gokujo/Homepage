@@ -1,3 +1,46 @@
+# Apache .htaccess file to protect .env files
+# This file provides server-level protection for environment files
+
+# Deny access to .env files
+<Files ".env*">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Deny access to environment files
+<FilesMatch "\.(env|env\.local|env\.development|env\.production|env\.test)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Additional security headers
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options nosniff
+    
+    # Enable XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Prevent clickjacking
+    Header always set X-Frame-Options DENY
+    
+    # Strict Transport Security (HTTPS only)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+    
+    # Content Security Policy
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'"
+</IfModule>
+
+# Disable server signature
+ServerSignature Off
+
+# Hide Apache version
+<IfModule mod_headers.c>
+    Header unset Server
+    Header always unset X-Powered-By
+</IfModule>
+
+# Enable mod_rewrite
 RewriteEngine On
 RewriteBase /
 
@@ -5,8 +48,3 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
-
-# Security headers
-Header always set X-Content-Type-Options nosniff
-Header always set X-Frame-Options DENY
-Header always set X-XSS-Protection "1; mode=block"
