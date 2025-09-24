@@ -25,7 +25,7 @@
     Header always set X-Frame-Options DENY
     
     # Strict Transport Security (HTTPS only)
-    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
     
     # Content Security Policy
     Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'"
