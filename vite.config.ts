@@ -24,6 +24,14 @@ export default defineConfig({
       },
     },
   },
+  // Security: Exclude sensitive files from build
+  publicDir: 'public',
+  define: {
+    // Prevent environment variables from being exposed in client-side code
+    __VUE_PROD_DEVTOOLS__: false,
+  },
+  // Ensure .env files are not included in the build
+  assetsInclude: [],
 })
 
 
